@@ -42,7 +42,7 @@ export component AppWindow inherits Window {
 
     VerticalBox { 
         Text { text: root.current-value; }
-        Keyboard { }
+        Keyboard { key-pressed(k) => { root.key_pressed(k) } }
     }
 }
 
@@ -50,6 +50,10 @@ export component AppWindow inherits Window {
 
 fn main() -> Result<(), slint::PlatformError> {
     let app = AppWindow::new()?;
+
+    app.on_key_pressed(|k: slint::SharedString| {
+        eprintln!("Key pressed: {k}");
+    });
 
     app.run()?;
 
