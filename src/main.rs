@@ -3,15 +3,52 @@ use ui_project_rs::add;
 use slint::slint;
 
 slint! {
-    export component AppWindow inherits Window {
-        Text { text: "Hello World!"; }
+
+import { Button, GridBox, VerticalBox} from "std-widgets.slint";
+
+component Keyboard {
+    callback key-pressed(string);
+
+    GridBox {
+        Row {
+            Button { text: "7"; clicked => { root.key-pressed(self.text) }}
+            Button { text: "8"; clicked => { root.key-pressed(self.text) }}
+            Button { text: "9"; clicked => { root.key-pressed(self.text) }}
+            Button { text: "Add"; clicked => { root.key-pressed(self.text) }}
+            Button { rowspan: 4; text: "="; clicked => { root.key-pressed(self.text) }}
+        }
+        Row {
+            Button { text: "4"; clicked => { root.key-pressed(self.text) }}
+            Button { text: "5"; clicked => { root.key-pressed(self.text) }}
+            Button { text: "6"; clicked => { root.key-pressed(self.text) }}
+            Button { text: "Sub"; clicked => { root.key-pressed(self.text) }}
+        }
+        Row {
+            Button { text: "1"; clicked => { root.key-pressed(self.text) }}
+            Button { text: "2"; clicked => { root.key-pressed(self.text) }}
+            Button { text: "3"; clicked => { root.key-pressed(self.text) }}
+            Button { text: "Mul"; clicked => { root.key-pressed(self.text) }}
+        }
+        Row {
+            Button { col: 2; text: "0"; clicked => { root.key-pressed(self.text) }}
+            Button { col: 3; text: "Div"; clicked => { root.key-pressed(self.text) }}
+        }
     }
 }
 
-fn main() -> Result<(), slint::PlatformError> {
-    let result = add(4, 3);
-    println!("Hello, world! 4 + 3 = {result}");
+export component AppWindow inherits Window {
+    in-out property <int> current-value: 0;
+    callback key-pressed(string);
 
+    VerticalBox { 
+        Text { text: root.current-value; }
+        Keyboard { }
+    }
+}
+
+}
+
+fn main() -> Result<(), slint::PlatformError> {
     let app = AppWindow::new()?;
 
     app.run()?;
